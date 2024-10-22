@@ -7,6 +7,8 @@ import { recentWarnings } from './moderation/recentWarnings.js';
 import { rulePost } from './admin/rulePost.js';
 import { purge } from './moderation/purge.js'
 import { commandPanel } from './info/commandPanel.js';
+import { getElders } from './info/getElders.js';
+import { assignRole } from './moderation/assignRole.js';
 
 const commands = {
   ban,
@@ -18,6 +20,8 @@ const commands = {
   rulepost: rulePost,
   purge,
   commandpanel: commandPanel,
+  getelders: getElders,
+  assignrole: assignRole,
 };
 
 export async function handleCommand(message) {

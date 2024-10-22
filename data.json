@@ -1,20 +1,5 @@
 {
-  "warnings": [
-    {
-      "userId": "1217108983802761350",
-      "reason": "Used curse word(s): fuck",
-      "moderatorId": "1296042838177353780",
-      "timestamp": 1729546173802
-    }
-  ],
+  "warnings": [],
   "bans": [],
-  "mutes": [
-    {
-      "userId": "956671731953709156",
-      "duration": 7200000,
-      "reason": "violating clan rules",
-      "moderatorId": "1217108983802761350",
-      "timestamp": 1729545773674
-    }
-  ]
+  "mutes": []
 }

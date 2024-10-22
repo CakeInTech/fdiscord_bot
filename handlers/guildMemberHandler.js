@@ -5,12 +5,21 @@ export async function handleGuildMemberAdd(member) {
     channel => channel.name === '╭•˖˚🎉ᴡᴇʟᴄᴏᴍᴇ-ɪɴꜰᴏ'
   );
 
-  if (!welcomeChannel) return;
+  const rulesChannel = member.guild.channels.cache.find(
+    channel => channel.name === '‧˚₊⊹📜ʀᴜʟᴇs'
+  );
+
+  const councilChannel = member.guild.channels.cache.find(
+    channel => channel.name === '‧˚₊⊹𝙀𝙡𝙙𝙚𝙧𝙨-𝙋𝙖𝙨𝙨𝙖𝙜𝙚'
+  );
+
+  if (!welcomeChannel || !rulesChannel || !councilChannel) return;
 
   const welcomeEmbed = new EmbedBuilder()
-    .setColor('#0099ff')
-    .setTitle(`Welcome to the the Family Clan, ${member.user}!`)
-    .setDescription('Please select your role by reacting to this message:')
+    .setColor('#FFD700') // Gold color
+    .setTitle(`🌟 Welcome to the Family Clan, ${member.user}! 🌟`)
+    .setDescription(`Please select your role by reacting to this message:\n\n` +
+      `While you wait for your roles to be verified, please click on ${rulesChannel} and read the rules carefully!`)
     .addFields(
       { name: '🐉🔥 Dragon', value: 'React with 🐉', inline: true },
       { name: '⚔️🛡️ Slayer', value: 'React with ⚔️', inline: true },
@@ -25,37 +34,69 @@ export async function handleGuildMemberAdd(member) {
   await welcomeMessage.react('🗡️');
   await welcomeMessage.react('🏴‍☠️');
 
-  // Set up reaction collector
+  // Set up reaction collector for user role selection
   const filter = (reaction, user) => {
     return ['🐉', '⚔️', '🗡️', '🏴‍☠️'].includes(reaction.emoji.name) && user.id === member.id;
   };
 
   const collector = welcomeMessage.createReactionCollector({ filter, max: 1, time: 300000 });
 
-  collector.on('collect', async (reaction, user) => {
+  collector.on('collect', async (reaction) => {
     let role;
     switch (reaction.emoji.name) {
       case '🐉':
-        role = 'Dragon';
+        role = 'dragon';
         break;
       case '⚔️':
-        role = 'Slayer';
+        role = 'slayer';
         break;
       case '🗡️':
-        role = 'Assassin';
+        role = 'assassin';
         break;
       case '🏴‍☠️':
-        role = 'Bandit';
+        role = 'bandit';
         break;
     }
 
-    const councilChannel = member.guild.channels.cache.find(
-      channel => channel.name === '╭•˖˚🏰ᴄᴏᴜɴᴄɪʟ-ᴄʜᴀᴍʙᴇʀs'
-    );
+    // Notify the elders in the Elders-Passage channel
+    const roleRequestEmbed = new EmbedBuilder()
+      .setColor('#FFD700')
+      .setTitle(`Role Request: ${member.user.username}`)
+      .setDescription(`Requested Role: **${role}**\n\nReact with ✅ to approve or ❌ to deny.`);
 
-    if (councilChannel) {
-      await councilChannel.send(`${member.user.username} has selected the ${role} role. Please verify and assign the role.`);
-    }
+    const roleRequestMessage = await councilChannel.send({ embeds: [roleRequestEmbed] });
+
+    // Add confirmation reactions
+    await roleRequestMessage.react('✅');
+    await roleRequestMessage.react('❌');
+
+    // Set up reaction collector for elders to verify the role
+    const elderFilter = (reaction, user) => {
+      return ['✅', '❌'].includes(reaction.emoji.name) && user.roles.cache.some(r => r.name === 'Elder');
+    };
+
+    const elderCollector = roleRequestMessage.createReactionCollector({ elderFilter, max: 1, time: 300000 });
+
+    elderCollector.on('collect', async (reaction) => {
+      if (reaction.emoji.name === '✅') {
+        // Assign the role
+        const roleToAssign = member.guild.roles.cache.find(r => r.name.toLowerCase() === role);
+        if (roleToAssign) {
+          await member.roles.add(roleToAssign);
+          await member.send(`You have been assigned the **${role}** role! Welcome to the clan! 🎉`);
+        }
+      } else {
+        // Deny the role assignment, kick the member and send DM
+        await member.send(`Your request for the **${role}** role has been denied. Please rejoin the server and select a correct role.`);
+        await member.kick('Incorrect role selected. Rejoin to select the correct role.');
+      }
+    });
+
+    elderCollector.on('end', collected => {
+      if (collected.size === 0) {
+        councilChannel.send(`Role request for ${member.user.username} timed out. Please review it when you can.`);
+      }
+    });
   });
 
   collector.on('end', collected => {
