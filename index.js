@@ -6,6 +6,7 @@ import { loadData } from './utils/dataManager.js';
 
 dotenv.config();
 
+
 const client = new Client({
   intents: [
     GatewayIntentBits.Guilds,

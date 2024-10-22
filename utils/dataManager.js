@@ -49,3 +49,8 @@ export function addMute(userId, duration, reason, moderatorId) {
 export function getRecentWarnings(limit = 10) {
   return data.warnings.slice(-limit).reverse();
 }
+
+export function resetWarnings(userId) {
+    data.warnings = data.warnings.filter(warning => warning.userId !== userId);
+    saveData();
+}

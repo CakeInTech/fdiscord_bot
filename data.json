@@ -1,5 +1,12 @@
 {
-  "warnings": [],
+  "warnings": [
+    {
+      "userId": "1217108983802761350",
+      "reason": "Used curse word(s): fuck",
+      "moderatorId": "1296042838177353780",
+      "timestamp": 1729546173802
+    }
+  ],
   "bans": [],
   "mutes": [
     {

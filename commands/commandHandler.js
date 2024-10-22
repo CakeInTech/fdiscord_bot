@@ -5,6 +5,8 @@ import { unmute } from './moderation/unmute.js';
 import { recentBans } from './moderation/recentBans.js';
 import { recentWarnings } from './moderation/recentWarnings.js';
 import { rulePost } from './admin/rulePost.js';
+import { purge } from './moderation/purge.js'
+import { commandPanel } from './info/commandPanel.js';
 
 const commands = {
   ban,
@@ -14,6 +16,8 @@ const commands = {
   recentbans: recentBans,
   recentwarnings: recentWarnings,
   rulepost: rulePost,
+  purge,
+  commandpanel: commandPanel,
 };
 
 export async function handleCommand(message) {

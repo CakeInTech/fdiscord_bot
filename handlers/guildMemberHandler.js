@@ -9,7 +9,7 @@ export async function handleGuildMemberAdd(member) {
 
   const welcomeEmbed = new EmbedBuilder()
     .setColor('#0099ff')
-    .setTitle(`Welcome to the CODM Family Clan, ${member.user.username}!`)
+    .setTitle(`Welcome to the the Family Clan, ${member.user}!`)
     .setDescription('Please select your role by reacting to this message:')
     .addFields(
       { name: '🐉🔥 Dragon', value: 'React with 🐉', inline: true },
