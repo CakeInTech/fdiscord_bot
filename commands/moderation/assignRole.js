@@ -1,7 +1,6 @@
 import { PermissionsBitField, EmbedBuilder } from 'discord.js';
 
 export async function assignRole(message, args) {
-  // Check if the command is sent in the Elders-Passage channel
   const eldersPassageChannel = message.guild.channels.cache.find(channel => channel.name === 'elders-passage');
 
   if (message.channel.id !== eldersPassageChannel.id) {
@@ -11,8 +10,6 @@ export async function assignRole(message, args) {
   if (!message.member.permissions.has(PermissionsBitField.Flags.ManageRoles)) {
     return message.reply("You don't have permission to use this command.");
   }
-
-  // Check if a user is mentioned
   const mentionedUser = message.mentions.members.first();
 
   if (!mentionedUser) {
@@ -32,7 +29,7 @@ export async function assignRole(message, args) {
   }
 
   const confirmEmbed = new EmbedBuilder()
-    .setColor('#ffd700') // Gold color
+    .setColor('#ffd700')
     .setTitle(`Role Assignment Confirmation`)
     .setDescription(`Are you sure you want to assign the **${role.name}** role to ${mentionedUser.user.username}?`)
     .addFields(

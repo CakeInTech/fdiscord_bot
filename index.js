@@ -1,4 +1,5 @@
-import { Client, GatewayIntentBits, Partials } from 'discord.js';
+import pkg from 'discord.js';
+const { Client, GatewayIntentBits, Partials } = pkg;
 import dotenv from 'dotenv';
 import { handleMessage } from './handlers/messageHandler.js';
 import { handleGuildMemberAdd } from './handlers/guildMemberHandler.js';

@@ -1,15 +1,12 @@
 import { PermissionsBitField, EmbedBuilder } from 'discord.js';
 
 export async function rulePost(message) {
-  // Check for ManageGuild permission
   if (!message.member.permissions.has(PermissionsBitField.Flags.ManageGuild)) {
     return message.reply("You don't have permission to use this command.");
   }
 
-  // Step 1: Ask for the channel
   await message.reply("Please mention the channel where you want to post the rule:");
 
-  // Collect channel mention
   const filter = response => response.author.id === message.author.id;
   const channelCollector = await message.channel.awaitMessages({ filter, max: 1, time: 30000 });
 
@@ -25,7 +22,6 @@ export async function rulePost(message) {
     return message.reply("Invalid channel specified.");
   }
 
-  // Step 2: Ask for the title
   await message.reply("Please provide the title for the rule message:");
 
   const titleCollector = await message.channel.awaitMessages({ filter, max: 1, time: 30000 });
@@ -36,7 +32,6 @@ export async function rulePost(message) {
 
   const title = titleCollector.first().content;
 
-  // Step 3: Ask for the body content
   await message.reply("Please provide the body of the rule message:");
 
   const bodyCollector = await message.channel.awaitMessages({ filter, max: 1, time: 30000 });
@@ -47,7 +42,6 @@ export async function rulePost(message) {
 
   const messageContent = bodyCollector.first().content;
 
-  // Step 4: Ask for the footer
   await message.reply("Please provide the footer for the message:");
 
   const footerCollector = await message.channel.awaitMessages({ filter, max: 1, time: 30000 });
@@ -57,16 +51,12 @@ export async function rulePost(message) {
   }
 
   const footer = footerCollector.first().content;
-
-  // Optional: Ask for color
   await message.reply("You can optionally provide a color in hex format (e.g., #FF0000), or type 'skip' to use the default color:");
 
   const colorCollector = await message.channel.awaitMessages({ filter, max: 1, time: 30000 });
   const color = colorCollector.size && colorCollector.first().content.toLowerCase() !== 'skip'
     ? colorCollector.first().content.trim()
-    : '#0099ff'; // Default color if skipped
-
-  // Optional: Ask for an image or thumbnail
+    : '#0099ff'; 
   await message.reply("You can optionally provide a thumbnail URL or type 'skip':");
 
   const thumbnailCollector = await message.channel.awaitMessages({ filter, max: 1, time: 30000 });
@@ -81,7 +71,6 @@ export async function rulePost(message) {
     ? imageCollector.first().content.trim()
     : null;
 
-  // Step 5: Construct and send the embed
   const embed = new EmbedBuilder()
     .setColor(color)
     .setTitle(title)
