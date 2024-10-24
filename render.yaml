@@ -1,5 +1,5 @@
 services:
-  - type: worker
+  - type: web
     name: family-bot-pro
     env: node
     buildCommand: npm install
