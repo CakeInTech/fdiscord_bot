@@ -9,16 +9,21 @@ export async function handleGuildMemberAdd(member) {
     channel => channel.name === '‧˚₊⊹📜ʀᴜʟᴇs'
   );
 
+  const accessChannel = member.guild.channels.cache.find(
+    channel => channel.name === '╭•access•╮'
+  );
+
   const councilChannel = member.guild.channels.cache.find(
     channel => channel.name === '‧˚₊⊹𝙀𝙡𝙙𝙚𝙧𝙨-𝙋𝙖𝙨𝙨𝙖𝙜𝙚'
   );
 
-  if (!welcomeChannel || !rulesChannel || !councilChannel) return;
+  if (!welcomeChannel || !rulesChannel || !accessChannel || !councilChannel) return;
 
   const welcomeEmbed = new EmbedBuilder()
     .setColor('#FFD700') // Gold color
     .setTitle(`🌟 Welcome to the Family Clan, ${member.user}! 🌟`)
     .setDescription(`Please select your role by reacting to this message:\n\n` +
+      `⚠️ **IMPORTANT:** If you are not a CODM player, please check out the ${accessChannel} channel for assistance. **Do not react to the roles (Dragon, Slayer, Bandit, Assassin) unless you are a CODM player!**\n\n` +
       `While you wait for your roles to be verified, please click on ${rulesChannel} and read the rules carefully!`)
     .addFields(
       { name: '🐉🔥 Dragon', value: 'React with 🐉', inline: true },
